@@ -49,8 +49,6 @@ public class Destino {
   }
 
   /**
-   * @param id
-   * @param descricaoViagem
    */
   public Destino(final long id, final String descricaoViagem) {
     this.destinoId = id;
@@ -58,12 +56,6 @@ public class Destino {
   }
 
   /**
-   * @param destinoId
-   * @param nome
-   * @param qtTickets
-   * @param continente
-   * @param pais
-   * @param descricaoViagem
    */
   public Destino(final long destinoId, final String nome, final int qtTickets,
                  final String continente, final String pais,
@@ -77,11 +69,6 @@ public class Destino {
   }
 
   /**
-   * @param nome
-   * @param qtTickets
-   * @param continente
-   * @param pais
-   * @param descricaoViagem
    */
   public Destino(final String nome, final int qtTickets,
                  final String continente, final String pais,

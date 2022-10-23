@@ -13,161 +13,155 @@ import javax.validation.constraints.Pattern;
 @Entity
 @Table
 public class Perfil {
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name = "perfil_id")
-	private long perfilId;
-	@NotBlank
-	private String nome;
-	@Pattern(regexp = "([0-9]{2}[\\.]?[0-9]{3}[\\.]?[0-9]{3}[\\/]?[0-9]{4}[-]?[0-9]{2})|([0-9]{3}[\\.]?[0-9]{3}[\\.]?[0-9]{3}[-]?[0-9]{2})")
-	private long cpf;
-	@Column(name = "cep", length = 11)
-	private long cep;
-	@Pattern(regexp = "^.*(?=.{8,})(?=..*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=]).*$")
-	private String senha;
-	@Email
-	private String email;
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "perfil_id")
+    private long perfilId;
+    @NotBlank
+    private String nome;
 
-	/**
-	 * @return the id
-	 */
-	public long getId() {
-		return perfilId;
-	}
+    @Pattern(regexp = "([0-9]{2}[\\.]?[0-9]{3}[\\.]?[0-9]{3}[\\/]?[0-9]{4}[-]?[0-9]{2})|([0-9]{3}[\\.]?[0-9]{3}[\\.]?[0-9]{3}[-]?[0-9]{2})")
+    @Column(unique = true, name = "cpf", nullable = false, updatable = false)
+    private long cpf;
+    @Column(name = "cep", length = 11)
+    private long cep;
+    @Pattern(regexp = "^.*(?=.{8,})(?=..*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=]).*$")
+    private String senha;
+    @Email
+    @Column(unique = true, updatable = true, nullable = false)
+    private String email;
 
-	/**
-	 * @param id the id to set
-	 */
-	public void setId(final long id) {
-		this.perfilId = id;
-	}
+    /**
+     *
+     */
+    public Perfil(@NotBlank final String nome,
+                  @Pattern(regexp = "([0-9]{2}\\.[0-9]{3}\\..-9]{3}\\/?[/]{4}-?[0-9]{2})|([0-9]{3}\\.?[0-9].\\.?[0-9]{3.[0-9]{2})") final long cpf,
+                  @Pattern(regexp = "") final long cep,
+                  @Pattern(regexp = "^.*(?=.{8,})(?=.+[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=]).*$") final String senha,
+                  @Email final String email) {
+        this.nome = nome;
+        this.cpf = cpf;
+        this.cep = cep;
+        this.senha = senha;
+        this.email = email;
+    }
 
-	/**
-	 * @return the nome
-	 */
-	public String getNome() {
-		return nome;
-	}
+    /**
+     *
+     */
+    public Perfil(final long id, @NotBlank final String nome,
+                  @Pattern(regexp = "([0-9]{2}[\\.]?[0-9]{3}[\\.]?[0-9]{3}[\\/]?[0-9]{4}[-]?[0-9]{2})|([0-9]{3}[\\.]?[0-9]{3}[\\.]?[0-9]{3}[-]?[0-9]{2})") final long cpf,
+                  @Pattern(regexp = "") final long cep,
+                  @Pattern(regexp = "^.*(?=.{8,})(?=..*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=]).*$") final String senha,
+                  @Email final String email) {
+        this.perfilId = id;
+        this.nome = nome;
+        this.cpf = cpf;
+        this.cep = cep;
+        this.senha = senha;
+        this.email = email;
+    }
 
-	/**
-	 * @param nome the nome to set
-	 */
-	public void setNome(final String nome) {
-		this.nome = nome;
-	}
+    /**
+     *
+     */
+    public Perfil() {
+    }
 
-	/**
-	 * @return the cpf
-	 */
-	public long getCpf() {
-		return cpf;
-	}
+    /**
+     * @return the id
+     */
+    public long getId() {
+        return perfilId;
+    }
 
-	/**
-	 * @param cpf the cpf to set
-	 */
-	public void setCpf(final long cpf) {
-		this.cpf = cpf;
-	}
+    /**
+     * @param id the id to set
+     */
+    public void setId(final long id) {
+        this.perfilId = id;
+    }
 
-	/**
-	 * @return the cep
-	 */
-	public long getCep() {
-		return cep;
-	}
+    /**
+     * @return the nome
+     */
+    public String getNome() {
+        return nome;
+    }
 
-	/**
-	 * @param cep the cep to set
-	 */
-	public void setCep(final long cep) {
-		this.cep = cep;
-	}
+    /**
+     * @param nome the nome to set
+     */
+    public void setNome(final String nome) {
+        this.nome = nome;
+    }
 
-	/**
-	 * @return the senha
-	 */
-	public String getSenha() {
-		return senha;
-	}
+    /**
+     * @return the cpf
+     */
+    public long getCpf() {
+        return cpf;
+    }
 
-	/**
-	 * @param senha the senha to set
-	 */
-	public void setSenha(final String senha) {
-		this.senha = senha;
-	}
+    /**
+     * @param cpf the cpf to set
+     */
+    public void setCpf(final long cpf) {
+        this.cpf = cpf;
+    }
 
-	/**
-	 * @return the email
-	 */
-	public String getEmail() {
-		return email;
-	}
+    /**
+     * @return the cep
+     */
+    public long getCep() {
+        return cep;
+    }
 
-	/**
-	 * @param email the email to set
-	 */
-	public void setEmail(final String email) {
-		this.email = email;
-	}
+    /**
+     * @param cep the cep to set
+     */
+    public void setCep(final long cep) {
+        this.cep = cep;
+    }
 
-	/**
-	 * @param nome
-	 * @param cpf
-	 * @param cep
-	 * @param senha
-	 * @param email
-	 */
-	public Perfil(@NotBlank final String nome,
-			@Pattern(regexp = "([0-9]{2}[\\.]?[0-9]{3}[\\.]?[0-9]{3}[\\/]?[0-9]{4}[-]?[0-9]{2})|([0-9]{3}[\\.]?[0-9]{3}[\\.]?[0-9]{3}[-]?[0-9]{2})") final long cpf,
-			@Pattern(regexp = "") final long cep,
-			@Pattern(regexp = "^.*(?=.{8,})(?=..*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=]).*$") final String senha,
-			@Email final String email) {
-		this.nome = nome;
-		this.cpf = cpf;
-		this.cep = cep;
-		this.senha = senha;
-		this.email = email;
-	}
+    /**
+     * @return the senha
+     */
+    public String getSenha() {
+        return senha;
+    }
 
-	/**
-	 * @param id
-	 * @param nome
-	 * @param cpf
-	 * @param cep
-	 * @param senha
-	 * @param email
-	 */
-	public Perfil(final long id, @NotBlank final String nome,
-			@Pattern(regexp = "([0-9]{2}[\\.]?[0-9]{3}[\\.]?[0-9]{3}[\\/]?[0-9]{4}[-]?[0-9]{2})|([0-9]{3}[\\.]?[0-9]{3}[\\.]?[0-9]{3}[-]?[0-9]{2})") final long cpf,
-			@Pattern(regexp = "") final long cep,
-			@Pattern(regexp = "^.*(?=.{8,})(?=..*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=]).*$") final String senha,
-			@Email final String email) {
-		this.perfilId = id;
-		this.nome = nome;
-		this.cpf = cpf;
-		this.cep = cep;
-		this.senha = senha;
-		this.email = email;
-	}
+    /**
+     * @param senha the senha to set
+     */
+    public void setSenha(final String senha) {
+        this.senha = senha;
+    }
 
-	/**
-	 *
-	 */
-	public Perfil() {
-	}
+    /**
+     * @return the email
+     */
+    public String getEmail() {
+        return email;
+    }
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see java.lang.Object#toString()
-	 */
+    /**
+     * @param email the email to set
+     */
+    public void setEmail(final String email) {
+        this.email = email;
+    }
 
-	@Override
-	public String toString() {
-		return "Perfil [cep=" + cep + ", cpf=" + cpf + ", " + (email != null ? "email=" + email + ", " : "") + "id="
-				+ perfilId + ", " + (nome != null ? "nome=" + nome + ", " : "") + (senha != null ? "senha=" + senha : "") + "]";
-	}
+    /*
+     * (non-Javadoc)
+     *
+     * @see java.lang.Object#toString()
+     */
+
+    @Override
+    public String toString() {
+        return "Perfil [cep=" + cep + ", cpf=" + cpf + ", " + (email != null ? "email=" + email + ", " : "") + "id="
+                + perfilId + ", " + (nome != null ? "nome=" + nome + ", " : "") + (senha != null ? "senha=" + senha : "") + "]";
+    }
 
 }

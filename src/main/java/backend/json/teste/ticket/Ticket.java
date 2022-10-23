@@ -118,13 +118,7 @@ public class Ticket {
 	}
 
 	/**
-	 * @param id
-	 * @param preco
-	 * @param desconto
-	 * @param id_destino
-	 * @param id_perfil
-	 * @param duracao
-	 */
+     */
 	public Ticket(final UUID id, @NotNull final long preco, final long desconto, @NotNull final long id_destino,
 			final long id_perfil, @NotNull final int duracao) {
 		this.ticketId = id;
@@ -136,12 +130,7 @@ public class Ticket {
 	}
 
 	/**
-	 * @param preco
-	 * @param desconto
-	 * @param id_destino
-	 * @param id_perfil
-	 * @param duracao
-	 */
+     */
 	public Ticket(@NotNull final long preco, final long desconto, @NotNull final long id_destino, final long id_perfil,
 			@NotNull final int duracao) {
 		this.preco = preco;

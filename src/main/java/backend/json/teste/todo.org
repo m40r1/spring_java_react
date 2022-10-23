@@ -1,0 +1,36 @@
+#+title: Todo
+
+* BL
+** QtTickets
+Necessario gerar funcoes para
+*** [X] Diminuir qtTickets em destino
+Sempre que um perfil comprar um ticket atualizar o counter
+o IdDestino te conta em qual destino atualizar
+*** [ ] Perfil comprar ticket
+Achar destino
+se destino tem ticket disponivel
+opcao de comprar ticket
+*** [ ] Url comecar com /api
+
+
+* Tickets
+** [X] api atualizar desconto
+** OKAY gerar uuid no cadastro
+
+
+* Destino
+** PROJ Diminuir qt_tickets
+apis no destino deve ser suficiente
+pois sera comprado o ticket dentro do destino
+entao teremos acesso ao destinoId para a api
+
+plano b:usar a uuid do ticket
+e buscar pela id do destino no banco
+** [ ] Atualizar desconto
+A atualizacao no desconto tem que gerar uma altercao no preco
+
+
+* Perfil
+** [ ] Criar perfil
+** [ ] Atualizar senha e email
+** [ ] Comprar ticket
