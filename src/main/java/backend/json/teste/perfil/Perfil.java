@@ -1,71 +1,144 @@
 package backend.json.teste.perfil;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Pattern;
+import backend.json.teste.sec.AppRoles;
+import net.bytebuddy.implementation.bind.annotation.Default;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import javax.persistence.*;
+import javax.validation.constraints.*;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 @Entity
 @Table
-public class Perfil {
+public class Perfil implements UserDetails {
+    private boolean isAccountNonLocked;
+    private boolean isCredentialsNonExpired;
+    private boolean isEnabled = false;
+    @Enumerated(EnumType.STRING)
+    private AppRoles appRoles;
+    private boolean isAccountNonExpired;
+    private List<List<? extends GrantedAuthority>> grantedAuthorities;
+    @Positive(message = "id n pode ser negativo")
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "perfil_id")
+    @Column(name = "perfil_id", nullable = false)
     private long perfilId;
-    @NotBlank
-    private String nome;
-
-    @Pattern(regexp = "([0-9]{2}[\\.]?[0-9]{3}[\\.]?[0-9]{3}[\\/]?[0-9]{4}[-]?[0-9]{2})|([0-9]{3}[\\.]?[0-9]{3}[\\.]?[0-9]{3}[-]?[0-9]{2})")
+    @Column(unique = true)
+    @NotBlank(message = "perfil precisa de um nome")
+    private String username;
+    @Min(message = "cpf tem 11 digitos", value = 11)
+    @Max(message = "cpf tem 11 digitos", value = 11)
+    @Pattern(regexp = "([0-9]{2}[\\.]?[0-9]{3}[\\.]?[0-9]{3}[\\\\/]?[0-9]{4}[-]?[0-9]{2})|([0-9]{3}[\\.]?[0-9]{3}[\\.]?[0-9]{3}[-]?[0-9]{2})")
     @Column(unique = true, name = "cpf", nullable = false, updatable = false)
     private long cpf;
     @Column(name = "cep", length = 11)
+    @Pattern(regexp = "/^\\d{5}(-\\d{3})?$/")
     private long cep;
-    @Pattern(regexp = "^.*(?=.{8,})(?=..*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=]).*$")
-    private String senha;
+    @Pattern(message = "senha deve ter no minimo 8 caracteres ,maiuscula,minuscula,numero e simbolos", regexp = "^.*(?=.{8,})(?=..*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=]).*$")
+    private String password;
     @Email
     @Column(unique = true, updatable = true, nullable = false)
     private String email;
 
-    /**
-     *
-     */
-    public Perfil(@NotBlank final String nome,
-                  @Pattern(regexp = "([0-9]{2}\\.[0-9]{3}\\..-9]{3}\\/?[/]{4}-?[0-9]{2})|([0-9]{3}\\.?[0-9].\\.?[0-9]{3.[0-9]{2})") final long cpf,
-                  @Pattern(regexp = "") final long cep,
-                  @Pattern(regexp = "^.*(?=.{8,})(?=.+[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=]).*$") final String senha,
-                  @Email final String email) {
-        this.nome = nome;
-        this.cpf = cpf;
-        this.cep = cep;
-        this.senha = senha;
-        this.email = email;
-    }
-
-    /**
-     *
-     */
-    public Perfil(final long id, @NotBlank final String nome,
-                  @Pattern(regexp = "([0-9]{2}[\\.]?[0-9]{3}[\\.]?[0-9]{3}[\\/]?[0-9]{4}[-]?[0-9]{2})|([0-9]{3}[\\.]?[0-9]{3}[\\.]?[0-9]{3}[-]?[0-9]{2})") final long cpf,
-                  @Pattern(regexp = "") final long cep,
-                  @Pattern(regexp = "^.*(?=.{8,})(?=..*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=]).*$") final String senha,
-                  @Email final String email) {
-        this.perfilId = id;
-        this.nome = nome;
-        this.cpf = cpf;
-        this.cep = cep;
-        this.senha = senha;
-        this.email = email;
-    }
-
-    /**
-     *
-     */
     public Perfil() {
+    }
+
+    public Perfil(List<? extends GrantedAuthority> grantedAuthorities, boolean isAccountNonExpired, boolean isAccountNonLocked, boolean isCredentialsNonExpired, boolean isEnabled, AppRoles appRoles, long perfilId, String username, long cpf, long cep, String password, String email) {
+        this.grantedAuthorities = Collections.singletonList(grantedAuthorities);
+        this.isAccountNonExpired = isAccountNonExpired;
+        this.isAccountNonLocked = isAccountNonLocked;
+        this.isCredentialsNonExpired = isCredentialsNonExpired;
+        this.isEnabled = isEnabled;
+        this.appRoles = appRoles;
+        this.perfilId = perfilId;
+        this.username = username;
+        this.cpf = cpf;
+        this.cep = cep;
+        this.password = password;
+        this.email = email;
+    }
+
+    public Perfil(List<? extends GrantedAuthority> grantedAuthorities, boolean isAccountNonExpired, boolean isAccountNonLocked, boolean isCredentialsNonExpired, boolean isEnabled, AppRoles appRoles, String username, long cpf, long cep, String password, String email) {
+        this.grantedAuthorities = Collections.singletonList(grantedAuthorities);
+        this.isAccountNonExpired = isAccountNonExpired;
+        this.isAccountNonLocked = isAccountNonLocked;
+        this.isCredentialsNonExpired = isCredentialsNonExpired;
+        this.isEnabled = isEnabled;
+        this.appRoles = appRoles;
+        this.username = username;
+        this.cpf = cpf;
+        this.cep = cep;
+        this.password = password;
+        this.email = email;
+    }
+
+    public boolean getIsEnabled() {
+        return isEnabled;
+    }
+
+    public void setIsEnabled(boolean isEnabled) {
+        this.isEnabled = isEnabled;
+    }
+
+    /**
+     * @return
+     */
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        SimpleGrantedAuthority authority = new SimpleGrantedAuthority(appRoles.name());
+        return Collections.singletonList(authority);
+    }
+
+    public List<List<? extends GrantedAuthority>> getGrantedAuthorities() {
+        return grantedAuthorities;
+    }
+
+    public AppRoles getAppRoles() {
+        return appRoles;
+    }
+
+    /**
+     * @return
+     */
+    @Override
+    public boolean isAccountNonExpired() {
+        return isAccountNonExpired;
+    }
+
+    /**
+     * @return
+     */
+    @Override
+    public boolean isAccountNonLocked() {
+        return isAccountNonLocked;
+    }
+
+    /**
+     * @return
+     */
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return isCredentialsNonExpired;
+    }
+
+    /**
+     * @return
+     */
+    @Override
+    public boolean isEnabled() {
+        return isEnabled;
+    }
+
+    public long getPerfilId() {
+        return perfilId;
+    }
+
+    public void setPerfilId(long perfilId) {
+        this.perfilId = perfilId;
     }
 
     /**
@@ -85,15 +158,16 @@ public class Perfil {
     /**
      * @return the nome
      */
-    public String getNome() {
-        return nome;
+    @Override
+    public String getUsername() {
+        return username;
     }
 
     /**
-     * @param nome the nome to set
+     * @param username the nome to set
      */
-    public void setNome(final String nome) {
-        this.nome = nome;
+    public void setUsername(final String username) {
+        this.username = username;
     }
 
     /**
@@ -127,15 +201,16 @@ public class Perfil {
     /**
      * @return the senha
      */
-    public String getSenha() {
-        return senha;
+    @Override
+    public String getPassword() {
+        return password;
     }
 
     /**
-     * @param senha the senha to set
+     * @param password the senha to set
      */
-    public void setSenha(final String senha) {
-        this.senha = senha;
+    public void setPassword(final String password) {
+        this.password = password;
     }
 
     /**
@@ -161,7 +236,7 @@ public class Perfil {
     @Override
     public String toString() {
         return "Perfil [cep=" + cep + ", cpf=" + cpf + ", " + (email != null ? "email=" + email + ", " : "") + "id="
-                + perfilId + ", " + (nome != null ? "nome=" + nome + ", " : "") + (senha != null ? "senha=" + senha : "") + "]";
+                + perfilId + ", " + (username != null ? "nome=" + username + ", " : "") + (password != null ? "senha=" + password : "") + "]";
     }
 
 }

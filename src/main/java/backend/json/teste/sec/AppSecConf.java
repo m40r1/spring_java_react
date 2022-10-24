@@ -3,6 +3,7 @@ package backend.json.teste.sec;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -14,14 +15,18 @@ import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 
 import java.net.http.HttpHeaders;
 import java.net.http.HttpRequest;
+import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 import static backend.json.teste.sec.AppRoles.*;
 
 @Configuration
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class AppSecConf extends WebSecurityConfigurerAdapter {
 
     private final PasswordEncoder passwordEncoder;
+
 
     @Autowired
     public AppSecConf(PasswordEncoder passwordEncoder) {
@@ -31,7 +36,9 @@ public class AppSecConf extends WebSecurityConfigurerAdapter {
     // TODO usar apenas para teste local
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests()
+        http
+                .csrf().disable()//TODO usando para facilitar o teste das apis
+                .authorizeRequests()
                 /*.antMatchers("/destino**", "/ticket**", "/perfil**")
                 .hasRole(ADMIN.name())
                 .antMatchers("/ticket/*", "/destino**")
@@ -44,7 +51,14 @@ public class AppSecConf extends WebSecurityConfigurerAdapter {
                 .anyRequest()
                 .authenticated()
                 .and()
-                .httpBasic();
+                .formLogin()
+                .loginPage("/login").permitAll()
+                .defaultSuccessUrl("/destino", true)
+                .and()
+                .rememberMe()
+                .tokenValiditySeconds((int) TimeUnit.DAYS.toSeconds(21))
+                .key(UUID.randomUUID().toString());
+
     }
 
 
